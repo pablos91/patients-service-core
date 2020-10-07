@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace PatientsService.Models
+namespace PatientsService.Models.DTO
 {
-    public class Patient
+    public class PatientDTO
     {
-        public int Id { get; set; }
         [Required]
         [StringLength(50)]
         public string FirstName { get; set; }
@@ -22,6 +20,12 @@ namespace PatientsService.Models
         public DateTime TestDate { get; set; }
         [Required]
         public bool TestPositive { get; set; }
-        public DateTime SysDate { get; set; }
+        public DateTime SysDate
+        {
+            get
+            {
+                return DateTime.Now;
+            }
+        }
     }
 }

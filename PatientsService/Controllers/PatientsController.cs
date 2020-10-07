@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PatientsService.Models;
+using PatientsService.Models.DTO;
 
 namespace PatientsService.Controllers
 {
@@ -13,10 +15,12 @@ namespace PatientsService.Controllers
     public class PatientsController : ControllerBase
     {
         private readonly PatientDbContext context;
+        private readonly IMapper mapper;
 
-        public PatientsController(PatientDbContext context)
+        public PatientsController(PatientDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -32,14 +36,15 @@ namespace PatientsService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Patient>> AddPatient(Patient patient)
+        public async Task<ActionResult<PatientDTO>> AddPatient(PatientDTO dto)
         {
             if(ModelState.IsValid)
             {
+                var patient = mapper.Map<Patient>(dto);
                 context.Patients.Add(patient);
                 await context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetPatient), patient);
+                return CreatedAtAction(nameof(GetPatient), new { id = patient.Id }, patient);
             }
 
             return BadRequest();
