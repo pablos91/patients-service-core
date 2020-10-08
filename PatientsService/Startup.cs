@@ -29,7 +29,10 @@ namespace PatientsService
         {
             services.AddControllers();
             services.AddDbContext<PatientDbContext>(opt =>
-              opt.UseSqlServer(String.Format(Configuration.GetConnectionString("Default"), System.Environment.GetEnvironmentVariable("AZURE_DB_PASS"))));
+              opt.UseSqlServer(String.Format(Configuration.GetConnectionString("Default"), System.Environment.GetEnvironmentVariable("AZURE_DB_PASS")),sqlSrvOptions => { 
+                  sqlSrvOptions.CommandTimeout(120); // azure serverless db autopause delay on first request
+              }));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
