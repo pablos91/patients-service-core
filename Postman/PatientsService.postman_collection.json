@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "508bfaec-dcb8-4846-89df-ec8f33e274ed",
+		"name": "PatientsService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAll",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"Paweł\",\r\n  \"lastName\": \"Niewiadomski\",\r\n  \"birthDate\": \"1991-01-01T21:13:12.840Z\",\r\n  \"testDate\": \"2020-10-07T21:13:12.840Z\",\r\n  \"testPositive\": true\r\n}"
+				},
+				"url": {
+					"raw": "{{API_URL}}/patients",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddPatient",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPatient",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/patients/3",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"patients",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5e42ae06-deff-4165-968d-bd6e9b831758",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "8bb945e1-daff-4045-a26e-20844058da40",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
