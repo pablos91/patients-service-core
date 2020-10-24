@@ -12,7 +12,10 @@ namespace PatientsService.Client
         private static readonly HttpClient _client = new HttpClient();
         static async Task Main(string[] args)
         {
-            switch (args[0])
+            HttpResponseMessage resp = null;
+            var action = args.Length > 0 ? args[0] : "list";
+
+            switch (action)
             {
                 case "add":
                     var patient = new Patient()
@@ -27,12 +30,12 @@ namespace PatientsService.Client
 
                     try
                     {
-                        var resp = await _client.PostAsync("http://localhost:54231/api/patients", new StringContent(
-                            JsonConvert.SerializeObject(patient), 
+                        resp = await _client.PostAsync("http://localhost:54231/api/patients", new StringContent(
+                            JsonConvert.SerializeObject(patient),
                             Encoding.UTF8, "application/json"
                             ));
 
-                        if(resp.IsSuccessStatusCode)
+                        if (resp.IsSuccessStatusCode)
                         {
                             Console.WriteLine("Patient added.");
                         }
@@ -41,16 +44,29 @@ namespace PatientsService.Client
                             Console.WriteLine($"PatientService responded with: {resp.StatusCode}");
                         }
 
-                    } 
+                    }
                     catch (Exception ex)
                     {
                         Console.Write(ex.Message);
                         throw;
                     }
-
                     return;
                 default:
-                    // TODO: listowanie pacjentów
+                    resp = await _client.GetAsync("http://localhost:54231/api/patients");
+
+                    if (resp.IsSuccessStatusCode)
+                    {
+                        var deserialized = JsonConvert.DeserializeObject<Patient[]>(await resp.Content.ReadAsStringAsync());
+
+                        foreach(var item in deserialized)
+                        {
+                            Console.WriteLine($"Imię: {item.FirstName}, Nazwisko: {item.LastName}, Email: {item.Email}, Zakażony: {(item.TestPositive ? "TAK": "NIE")}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"PatientService responded with: {resp.StatusCode}");
+                    }
                     return;
             }
         }

@@ -3,6 +3,9 @@
     "PatientsService.Client": {
       "commandName": "Project",
       "commandLineArgs": "add \"Paweł\" \"Konsolowy\" \"1991-01-01\" \"2020-01-01\" true \"pawel@maple.com.pl\""
+    },
+    "List Patients": {
+      "commandName": "Project"
     }
   }
 }
