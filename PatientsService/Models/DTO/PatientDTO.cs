@@ -15,6 +15,9 @@ namespace PatientsService.Models.DTO
         [StringLength(100)]
         public string LastName { get; set; }
         [Required]
+        [StringLength(100)]
+        public string Email { get; set; }
+        [Required]
         public DateTime BirthDate { get; set; }
         [Required]
         public DateTime TestDate { get; set; }

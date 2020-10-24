@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PatientsService.Services;
 
 namespace PatientsService
 {
@@ -42,6 +43,8 @@ namespace PatientsService
                     Description = string.Empty
                 });
             });
+            services.AddScoped<ServiceBusSender>();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
