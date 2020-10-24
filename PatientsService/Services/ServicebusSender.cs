@@ -23,6 +23,7 @@ namespace PatientsService.Services
         {
             string data = JsonConvert.SerializeObject(payload);
             Message message = new Message(Encoding.UTF8.GetBytes(data));
+            message.ContentType = "application/json";
             await _queueClient.SendAsync(message);
         }
     }

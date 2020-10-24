@@ -11,5 +11,6 @@ namespace PatientsService.Client
         public DateTime BirthDate { get; set; }
         public DateTime TestDate { get; set; }
         public bool TestPositive { get; set; }
+        public string Email { get; set; }
     }
 }

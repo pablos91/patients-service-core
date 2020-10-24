@@ -22,6 +22,7 @@ namespace PatientsService.Client
                         BirthDate = DateTime.ParseExact(args[3], "yyyy-MM-dd", CultureInfo.InvariantCulture),
                         TestDate = DateTime.ParseExact(args[4], "yyyy-MM-dd", CultureInfo.InvariantCulture),
                         TestPositive = bool.Parse(args[5]),
+                        Email = args[6]
                     };
 
                     try
