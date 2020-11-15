@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PatientsService.Models;
@@ -13,6 +14,7 @@ namespace PatientsService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PatientsController : ControllerBase
     {
         private readonly PatientDbContext _context;
@@ -27,6 +29,7 @@ namespace PatientsService.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAllPatients()
         {
             return Ok(_context.Patients.ToList());
@@ -38,6 +41,7 @@ namespace PatientsService.Controllers
             return Ok(_context.Patients.FirstOrDefault(x => x.Id == id));
         }
 
+        
         [HttpPost]
         public async Task<ActionResult<PatientDTO>> AddPatient(PatientDTO dto)
         {

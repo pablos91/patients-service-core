@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using IdentityModel.Client;
+using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Net.Http;
@@ -30,10 +31,19 @@ namespace PatientsService.Client
 
                     try
                     {
-                        resp = await _client.PostAsync("http://localhost:54231/api/patients", new StringContent(
-                            JsonConvert.SerializeObject(patient),
-                            Encoding.UTF8, "application/json"
-                            ));
+                        var request = new HttpRequestMessage()
+                        {
+                            RequestUri = new Uri("http://localhost:54231/api/patients"),
+                            Method = HttpMethod.Post,
+                            Content = new StringContent(
+                                JsonConvert.SerializeObject(patient),
+                                Encoding.UTF8, "application/json"
+                            )
+                        };
+
+                        request.Headers.Add("Authorization", $"Bearer {await GetToken()}");
+
+                        resp = await _client.SendAsync(request);
 
                         if (resp.IsSuccessStatusCode)
                         {
@@ -58,9 +68,9 @@ namespace PatientsService.Client
                     {
                         var deserialized = JsonConvert.DeserializeObject<Patient[]>(await resp.Content.ReadAsStringAsync());
 
-                        foreach(var item in deserialized)
+                        foreach (var item in deserialized)
                         {
-                            Console.WriteLine($"Imię: {item.FirstName}, Nazwisko: {item.LastName}, Email: {item.Email}, Zakażony: {(item.TestPositive ? "TAK": "NIE")}");
+                            Console.WriteLine($"Imię: {item.FirstName}, Nazwisko: {item.LastName}, Email: {item.Email}, Zakażony: {(item.TestPositive ? "TAK" : "NIE")}");
                         }
                     }
                     else
@@ -69,6 +79,26 @@ namespace PatientsService.Client
                     }
                     return;
             }
+        }
+
+        private static async Task<string> GetToken()
+        {
+            using var client = new HttpClient();
+
+            var tokenRequest = new ClientCredentialsTokenRequest
+            {
+                Address = "https://login.microsoftonline.com/a18c5d1e-7762-495b-96de-e36703dab8bc/oauth2/v2.0/token", // Tenant ID
+                ClientId = "e5f5d88f-f4b2-4e61-84f5-8a46aed17127", // Client ID
+                ClientSecret = System.Environment.GetEnvironmentVariable("AZURE_AD_SECRET"), // Client Secret
+                Scope = "api://e5f5d88f-f4b2-4e61-84f5-8a46aed17127/.default" // Scope + /.default
+            };
+
+            var token = await client.RequestClientCredentialsTokenAsync(tokenRequest);
+
+            if (token.IsError)
+                throw new InvalidOperationException($"Couldn't gather token. Details: {token.Error}");
+
+            return token.AccessToken;
         }
     }
 }

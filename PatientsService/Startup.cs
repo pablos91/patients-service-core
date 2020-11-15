@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using PatientsService.Services;
 
@@ -30,7 +32,8 @@ namespace PatientsService
         {
             services.AddControllers();
             services.AddDbContext<PatientDbContext>(opt =>
-              opt.UseSqlServer(String.Format(Configuration.GetConnectionString("Default"), System.Environment.GetEnvironmentVariable("AZURE_DB_PASS")),sqlSrvOptions => { 
+              opt.UseSqlServer(String.Format(Configuration.GetConnectionString("Default"), System.Environment.GetEnvironmentVariable("AZURE_DB_PASS")), sqlSrvOptions =>
+              {
                   sqlSrvOptions.CommandTimeout(120); // azure serverless db autopause delay on first request
               }));
 
@@ -45,6 +48,21 @@ namespace PatientsService
             });
             services.AddScoped<ServiceBusSender>();
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://login.microsoftonline.com/a18c5d1e-7762-495b-96de-e36703dab8bc/v2.0/";
+                options.Audience = "api://e5f5d88f-f4b2-4e61-84f5-8a46aed17127";
+                options.TokenValidationParameters.ValidateIssuer = false;
+                options.IncludeErrorDetails = true;
+            });
+
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
@@ -58,6 +76,7 @@ namespace PatientsService
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
