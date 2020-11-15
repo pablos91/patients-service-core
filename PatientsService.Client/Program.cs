@@ -48,8 +48,8 @@ namespace PatientsService.Client
                     {
                         var request = new HttpRequestMessage()
                         {
-                            RequestUri = new Uri("http://localhost:54231/api/patients"),
-                            Method = HttpMethod.Post,
+                            RequestUri = new Uri("http://localhost:5000/api/patients"),
+                            Method = HttpMethod.Put,
                             Content = new StringContent(
                                 JsonConvert.SerializeObject(patient),
                                 Encoding.UTF8, "application/json"
@@ -77,7 +77,7 @@ namespace PatientsService.Client
                     }
                     return;
                 default:
-                    resp = await _client.GetAsync("http://localhost:54231/api/patients");
+                    resp = await _client.GetAsync("http://localhost:5000/api/patients");
 
                     if (resp.IsSuccessStatusCode)
                     {

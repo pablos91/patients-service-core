@@ -41,6 +41,12 @@ namespace PatientsService.Controllers
             return Ok(_context.Patients.FirstOrDefault(x => x.Id == id));
         }
 
+        [HttpPut]
+        [AllowAnonymous]
+        public IActionResult InvalidAction()
+        {
+            throw new InvalidOperationException("Symulacja błedu");
+        }
         
         [HttpPost]
         public async Task<ActionResult<PatientDTO>> AddPatient(PatientDTO dto)
