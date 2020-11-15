@@ -16,7 +16,7 @@ namespace PatientsService.Client
         {
             HttpResponseMessage resp = null;
             var action = args.Length > 0 ? args[0] : "list";
-
+            string token = null;
             var app = PublicClientApplicationBuilder.Create("e5f5d88f-f4b2-4e61-84f5-8a46aed17127")
                 .WithAuthority("https://login.microsoftonline.com/a18c5d1e-7762-495b-96de-e36703dab8bc/v2.0/")
                 .WithDefaultRedirectUri()
@@ -24,7 +24,12 @@ namespace PatientsService.Client
 
             var result = await app.AcquireTokenInteractive(new[] { "api://e5f5d88f-f4b2-4e61-84f5-8a46aed17127/.default" }).ExecuteAsync();
 
-            var token = result.AccessToken;
+            //var result = await app.AcquireTokenWithDeviceCode(new[] { "api://e5f5d88f-f4b2-4e61-84f5-8a46aed17127/.default" }, async (r) =>
+            //{
+            //    Console.Write(r.Message);
+            //}).ExecuteAsync();
+
+            token = result.AccessToken;
 
             switch (action)
             {
