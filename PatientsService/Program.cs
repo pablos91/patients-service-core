@@ -29,10 +29,9 @@ namespace PatientsService
 
                         loggerConfig.ReadFrom.Configuration(context.Configuration);
                         loggerConfig.WriteTo.ApplicationInsights(telemetryConfiguration, TelemetryConverter.Traces);
-                        if (context.HostingEnvironment.IsDevelopment())
-                        {
-                            loggerConfig.WriteTo.Console();
-                        }
+                        // always log to console (docker env)
+                        loggerConfig.WriteTo.Console();
+
                         loggerConfig.WriteTo.File("log_.txt", rollingInterval: RollingInterval.Day);
                     });
                     webBuilder.UseStartup<Startup>();
