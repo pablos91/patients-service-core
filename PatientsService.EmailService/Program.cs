@@ -18,7 +18,7 @@ namespace PatientsService.EmailService
         {
             var queueName = "messages";
             var queueClient = new QueueClient(
-                string.Format("Endpoint=sb://dp104pniewiadomski-patients.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={0}",
+                string.Format("Endpoint=sb://dp104pniewiadomski.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={0}",
                 Environment.GetEnvironmentVariable("SHARED_KEY")),
                 queueName);
             var messageHandlerOptions = new MessageHandlerOptions(OnException);
@@ -29,6 +29,7 @@ namespace PatientsService.EmailService
 
         private static Task OnException(ExceptionReceivedEventArgs arg)
         {
+            // add serilog to log exceptions
             throw arg.Exception;
         }
 
