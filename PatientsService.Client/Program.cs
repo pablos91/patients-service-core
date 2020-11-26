@@ -48,7 +48,7 @@ namespace PatientsService.Client
                     {
                         var request = new HttpRequestMessage()
                         {
-                            RequestUri = new Uri("http://localhost:5000/api/patients"),
+                            RequestUri = new Uri("https://patients.maple.com.pl/api/patients"),
                             Method = HttpMethod.Put,
                             Content = new StringContent(
                                 JsonConvert.SerializeObject(patient),
@@ -77,7 +77,7 @@ namespace PatientsService.Client
                     }
                     return;
                 default:
-                    resp = await _client.GetAsync("http://localhost:5000/api/patients");
+                    resp = await _client.GetAsync("https://patients.maple.com.pl/api/patients");
 
                     if (resp.IsSuccessStatusCode)
                     {

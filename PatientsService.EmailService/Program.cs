@@ -6,6 +6,8 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Serilog;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace PatientsService.EmailService
 {
@@ -16,6 +18,7 @@ namespace PatientsService.EmailService
 
         static async Task Main(string[] args)
         {
+            ConfigureLogger();
             var queueName = "messages";
             var queueClient = new QueueClient(
                 string.Format("Endpoint=sb://dp104pniewiadomski.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey={0}",
@@ -27,15 +30,28 @@ namespace PatientsService.EmailService
             await Task.Delay(-1);
         }
 
+        private static void ConfigureLogger()
+        {
+            var telemetryConfiguration = TelemetryConfiguration.CreateDefault();
+            telemetryConfiguration.InstrumentationKey = "0ac6c7e1-b22d-44f7-bf87-8988a960d204";
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.ApplicationInsights(telemetryConfiguration, TelemetryConverter.Traces)
+                .CreateLogger();
+        }
+
         private static Task OnException(ExceptionReceivedEventArgs arg)
         {
-            // add serilog to log exceptions
-            throw arg.Exception;
+            return Task.Run(() => Log.Error(arg.Exception, "Something went wrong"));
         }
 
         private static async Task OnMessage(Message arg1, CancellationToken arg2)
         {
             var payload = JsonConvert.DeserializeObject<MessagePayload>(Encoding.UTF8.GetString(arg1.Body));
+
+            Log.Information($"Processing message to {payload.EmailAddress} ...");
 
             var smtpClient = new SmtpClient("smtp.zoho.eu")
             {
@@ -55,6 +71,9 @@ namespace PatientsService.EmailService
             msg.To.Add(payload.EmailAddress);
 
             await smtpClient.SendMailAsync(msg);
+
+            Log.Information($"E-mail sent to {payload.EmailAddress} ...");
+
         }
 
         public class MessagePayload
