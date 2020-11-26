@@ -49,7 +49,7 @@ namespace PatientsService.Client
                         var request = new HttpRequestMessage()
                         {
                             RequestUri = new Uri("https://patients.maple.com.pl/api/patients"),
-                            Method = HttpMethod.Put,
+                            Method = HttpMethod.Post,
                             Content = new StringContent(
                                 JsonConvert.SerializeObject(patient),
                                 Encoding.UTF8, "application/json"
