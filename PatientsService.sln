@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientsService", "Patients
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatientsService.Client", "PatientsService.Client\PatientsService.Client.csproj", "{C6E83999-6393-4F69-B2A8-98EFA09D8336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientsService.EmailService", "PatientsService.EmailService\PatientsService.EmailService.csproj", "{CEF20A35-8E37-4C1F-8631-B5E4B8CD344A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientsService.NotificationService", "PatientsService.NotificationService\PatientsService.NotificationService.csproj", "{BD90A86E-5302-456B-98FF-D8D6ADA6F3C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{C6E83999-6393-4F69-B2A8-98EFA09D8336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6E83999-6393-4F69-B2A8-98EFA09D8336}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6E83999-6393-4F69-B2A8-98EFA09D8336}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEF20A35-8E37-4C1F-8631-B5E4B8CD344A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEF20A35-8E37-4C1F-8631-B5E4B8CD344A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEF20A35-8E37-4C1F-8631-B5E4B8CD344A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEF20A35-8E37-4C1F-8631-B5E4B8CD344A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD90A86E-5302-456B-98FF-D8D6ADA6F3C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD90A86E-5302-456B-98FF-D8D6ADA6F3C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD90A86E-5302-456B-98FF-D8D6ADA6F3C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD90A86E-5302-456B-98FF-D8D6ADA6F3C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
