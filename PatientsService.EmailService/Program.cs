@@ -53,24 +53,32 @@ namespace PatientsService.EmailService
 
             Log.Information($"Processing message to {payload.EmailAddress} ...");
 
-            var smtpClient = new SmtpClient("smtp.zoho.eu")
+            try
             {
-                Port = 587,
-                Credentials = new NetworkCredential(_from, Environment.GetEnvironmentVariable("EMAIL_PASS")),
-                EnableSsl = true
-            };
+                var smtpClient = new SmtpClient("smtp.zoho.eu")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(_from, Environment.GetEnvironmentVariable("EMAIL_PASS")),
+                    EnableSsl = true
+                };
 
-            var msg = new MailMessage
+                var msg = new MailMessage
+                {
+                    From = new MailAddress(_from),
+                    Subject = payload.Title,
+                    Body = $"<h1>{payload.Message}</h1>",
+                    IsBodyHtml = true
+                };
+
+                msg.To.Add(payload.EmailAddress);
+
+                await smtpClient.SendMailAsync(msg);
+            }
+            catch(Exception ex)
             {
-                From = new MailAddress(_from),
-                Subject = payload.Title,
-                Body = $"<h1>{payload.Message}</h1>",
-                IsBodyHtml = true
-            };
-
-            msg.To.Add(payload.EmailAddress);
-
-            await smtpClient.SendMailAsync(msg);
+                Log.Error(ex, "Problem when sending e-mail ... Please check exception");
+            }
+           
 
             Log.Information($"E-mail sent to {payload.EmailAddress} ...");
 
